@@ -1,7 +1,10 @@
 /* ==========================================================================
-   Fearless — Liquid Void theme
+   FEARLESS — "Liquid Void" theme
    Neon Purple (#7B2CFF) x Electric Blue (#00AFFF) on Black (#050505)
+   Full rewrite — glassmorphism, liquid motion, aurora, mouse spotlight
    ========================================================================== */
+
+/* ---------- tokens ---------- */
 
 :root{
   --void:        #050505;
@@ -10,13 +13,24 @@
   --purple-soft: #B385FF;
   --blue:        #00AFFF;
   --blue-soft:   #5FD4FF;
+
   --glass:       rgba(255,255,255,0.05);
+  --glass-2:     rgba(255,255,255,0.08);
   --glass-brd:   rgba(255,255,255,0.12);
+
   --text:        #EAF2FF;
   --text-dim:    #93A0B8;
+  --text-faint:  #5C6580;
+
   --font-display:'Rajdhani', 'Segoe UI', sans-serif;
   --font-body:   'Space Grotesk', 'Segoe UI', sans-serif;
+
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
 }
+
+/* ---------- reset ---------- */
 
 *{ box-sizing:border-box; }
 html{ scroll-behavior:smooth; }
@@ -31,7 +45,15 @@ body{
   position:relative;
 }
 
-/* ---------- layered atmospheric background ---------- */
+a{ color:inherit; }
+ul{ margin:0; padding:0; }
+
+::selection{
+  background:rgba(123,44,255,0.4);
+  color:#fff;
+}
+
+/* ---------- atmospheric background layers ---------- */
 
 .bg-layer{
   position:fixed;
@@ -104,7 +126,7 @@ body{
   opacity:0.5;
 }
 
-/* ---------- structure ---------- */
+/* ---------- page shell ---------- */
 
 .page{
   position:relative;
@@ -113,6 +135,8 @@ body{
   margin:0 auto;
   padding:0 24px 80px;
 }
+
+/* ---------- header / brand ---------- */
 
 header.top{
   display:flex;
@@ -129,20 +153,19 @@ header.top{
   color:var(--text);
 }
 
-.brand-mark{
-  width:36px; height:36px;
-  border-radius:10px;
-  background:linear-gradient(135deg, var(--purple), var(--blue));
-  box-shadow:0 0 18px rgba(123,44,255,0.55), 0 0 34px rgba(0,175,255,0.35);
-  position:relative;
+.brand-logo{
+  width:38px;
+  height:38px;
+  border-radius:11px;
+  object-fit:contain;
+  display:block;
   flex:none;
+  filter:drop-shadow(0 0 10px rgba(123,44,255,0.55)) drop-shadow(0 0 18px rgba(0,175,255,0.30));
+  transition:filter .3s ease, transform .3s ease;
 }
-.brand-mark::after{
-  content:"";
-  position:absolute; inset:6px;
-  border-radius:6px;
-  background:var(--void);
-  opacity:0.85;
+.brand:hover .brand-logo{
+  filter:drop-shadow(0 0 14px rgba(123,44,255,0.75)) drop-shadow(0 0 26px rgba(0,175,255,0.45));
+  transform:scale(1.04);
 }
 
 .brand-name{
@@ -201,6 +224,21 @@ header.top{
   50%{ opacity:0.4; transform:scale(0.7); }
 }
 
+.hero-logo{
+  width:88px;
+  height:88px;
+  border-radius:24px;
+  object-fit:contain;
+  margin:0 auto 26px;
+  display:block;
+  filter:drop-shadow(0 0 24px rgba(123,44,255,0.55)) drop-shadow(0 0 44px rgba(0,175,255,0.30));
+  animation:logo-float 5s ease-in-out infinite;
+}
+@keyframes logo-float{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-8px); }
+}
+
 .hero h1{
   font-family:var(--font-display);
   font-weight:700;
@@ -223,19 +261,21 @@ header.top{
   line-height:1.6;
 }
 
-/* ---------- glass cards ---------- */
+/* ---------- glass surfaces ---------- */
 
 .glass{
   position:relative;
   background:var(--glass);
   border:1px solid var(--glass-brd);
-  border-radius:20px;
+  border-radius:var(--radius-lg);
   backdrop-filter:blur(18px) saturate(150%);
   -webkit-backdrop-filter:blur(18px) saturate(150%);
   box-shadow:
     0 1px 0 rgba(255,255,255,0.08) inset,
     0 24px 60px rgba(0,0,0,0.45);
 }
+
+/* ---------- doc cards grid ---------- */
 
 .doc-grid{
   display:grid;
@@ -387,6 +427,8 @@ header.top{
 .back-link:hover{ color:var(--blue-soft); }
 .back-link svg{ width:14px; height:14px; }
 
+/* ---------- footer ---------- */
+
 footer.site{
   text-align:center;
   color:var(--text-dim);
@@ -396,7 +438,14 @@ footer.site{
 }
 footer.site span{ color:var(--purple-soft); }
 
+/* ---------- accessibility ---------- */
+
+a:focus-visible, .doc-card:focus-visible{
+  outline:2px solid var(--blue-soft);
+  outline-offset:3px;
+}
+
 @media (prefers-reduced-motion: reduce){
-  .aurora, .mist, .eyebrow::before{ animation:none !important; }
+  .aurora, .mist, .eyebrow::before, .hero-logo{ animation:none !important; }
   .doc-card{ transition:none; }
 }
